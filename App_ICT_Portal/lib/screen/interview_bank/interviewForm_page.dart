@@ -180,7 +180,7 @@ class _InterviewFormState extends State<InterviewForm> {
 
   void submitInterview() async {
     String url =
-        'http://192.168.137.1/dashboard/API_ICT_promotion/insert_interview.php';
+        'http://192.168.137.1/ICT/API_ICT_Portal/insert_interview.php';
     Map<String, String> headers = {
       "Content-type": "application/x-www-form-urlencoded"
     };

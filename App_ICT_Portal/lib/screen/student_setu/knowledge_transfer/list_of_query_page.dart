@@ -26,7 +26,7 @@ class _ListOfQueryPageState extends State<ListOfQueryPage> {
   Future<void> fetchQueries() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://192.168.137.1/dashboard/API_ICT_promotion/fetch_queries.php')); // Replace with your API endpoint
+          'http://192.168.137.1/ICT/API_ICT_Portal/fetch_queries.php')); // Replace with your API endpoint
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);

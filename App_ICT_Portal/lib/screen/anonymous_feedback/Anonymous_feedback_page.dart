@@ -106,7 +106,7 @@ class _FeedbackFormState extends State<FeedbackForm> {
     }
 
     String url =
-        'http://192.168.137.1/dashboard/API_ICT_promotion/insert_feedback.php'; // Replace with your PHP API URL
+        'http://192.168.137.1/ICT/API_ICT_Portal/insert_feedback.php'; // Replace with your PHP API URL
     Map<String, String> data = {
       'professor': selectedProfessor,
       'feedback_text': feedback,

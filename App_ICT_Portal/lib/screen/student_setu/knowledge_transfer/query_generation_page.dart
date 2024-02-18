@@ -18,7 +18,7 @@ class _QueryGenerationPageState extends State<QueryGenerationPage> {
   Future<void> submitQuery(Query query) async {
     final response = await http.post(
       Uri.parse(
-          'http://192.168.137.1/dashboard/API_ICT_promotion/insert_query.php'),
+          'http://192.168.137.1/ICT/API_ICT_Portal/insert_query.php'),
       body: {
         'heading': query.heading,
         'subject': query.subject,

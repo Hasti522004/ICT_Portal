@@ -31,7 +31,7 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
   Future<void> fetchStudents() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://192.168.137.1/dashboard/API_ICT_promotion/fetch_interviewbank.php'));
+          'http://192.168.137.1/ICT/API_ICT_Portal/fetch_interviewbank.php'));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         setState(() {

@@ -55,7 +55,7 @@ class _LeavePageState extends State<LeavePage> {
 
   void _submitLeaveApplication() async {
     String apiUrl =
-        'http://192.168.137.1/dashboard/API_ICT_promotion/insert_leave.php';
+        'http://192.168.137.1/ICT/API_ICT_Portal/insert_leave.php';
 
     String category = _selectedCategory ?? '';
     String fromDate =
