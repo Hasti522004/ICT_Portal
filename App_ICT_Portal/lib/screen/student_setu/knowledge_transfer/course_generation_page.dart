@@ -26,7 +26,7 @@ class _CourseGenerationPageState extends State<CourseGenerationPage> {
   Future<void> submitCourse(Course course) async {
     final response = await http.post(
       Uri.parse(
-          'http://192.168.137.1/ICT/API_ICT_Portal/insert_course.php'),
+          'http://172.30.48.1/ICT/API_ICT_Portal/insert_course.php'),
       body: {
         'heading': course.heading,
         'subject': course.subject,

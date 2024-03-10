@@ -6,7 +6,6 @@ import 'package:ict_portal/components/custom_app_bar.dart';
 import 'package:ict_portal/components/side_menu.dart';
 import 'package:ict_portal/screen/student_setu/knowledge_transfer/Query.dart';
 
-
 class ListOfQueryPage extends StatefulWidget {
   ListOfQueryPage({Key? key}) : super(key: key);
 
@@ -26,7 +25,7 @@ class _ListOfQueryPageState extends State<ListOfQueryPage> {
   Future<void> fetchQueries() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://192.168.137.1/ICT/API_ICT_Portal/fetch_queries.php')); // Replace with your API endpoint
+          'http://172.30.48.1/ICT/API_ICT_Portal/fetch_queries.php')); // Replace with your API endpoint
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);

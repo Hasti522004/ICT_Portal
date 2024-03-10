@@ -31,7 +31,7 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
   Future<void> fetchStudents() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://192.168.137.1/ICT/API_ICT_Portal/fetch_interviewbank.php'));
+          'https://www.ictmu.in/ict_portal/api/interview-bank.php?key=interview-bank@ict'));
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         setState(() {
@@ -44,7 +44,6 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
       }
     } catch (e) {
       print('Error fetching student data: $e');
-      // ignore: use_build_context_synchronously
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -67,10 +66,8 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
   void filterStudents(String query) {
     setState(() {
       filteredStudents = students.where((student) {
-        return student.studentName
-                .toLowerCase()
-                .contains(query.toLowerCase()) ||
-            student.companyName.toLowerCase().contains(query.toLowerCase());
+        return student.enr.toLowerCase().contains(query.toLowerCase()) ||
+            student.title.toLowerCase().contains(query.toLowerCase());
       }).toList();
     });
   }
@@ -92,7 +89,7 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
                   controller: searchController,
                   onChanged: filterStudents,
                   decoration: const InputDecoration(
-                    labelText: 'Search by Student or Company Name',
+                    labelText: 'Search by Enrollment Number or Company Name',
                     prefixIcon: Icon(Icons.search),
                   ),
                 ),
@@ -111,7 +108,7 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(filteredStudents[index].studentName),
+                                Text(filteredStudents[index].title),
                                 IconButton(
                                   icon: const Icon(Icons.add),
                                   onPressed: () {
@@ -131,17 +128,15 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      'Enrollment: ${filteredStudents[index].enrollment}'),
-                                  Text(
-                                      'Company Name: ${filteredStudents[index].companyName}'),
-                                  Text(
-                                      'Package: ${filteredStudents[index].package}'),
+                                      'Enrollment: ${filteredStudents[index].enr}'),
                                   Text('Date: ${filteredStudents[index].date}'),
+                                  // Add more fields as needed
                                 ],
                               ),
                             if (showInterviewButtonMap[index] == true)
                               ElevatedButton(
                                 onPressed: () {
+                                  // Navigate to the student details page or perform desired action
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(

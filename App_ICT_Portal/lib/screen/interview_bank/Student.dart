@@ -1,32 +1,40 @@
 class Student {
-  int id;
-  String studentName;
-  String enrollment;
-  String companyName;
-  String package;
-  String date;
-  String interviewExperience;
+  final String id;
+  final String enr;
+  final String title;
+  final String clink;
+  final String date;
+  final String category;
+  final String pack;
+  final String disc;
+  final String img;
+  final String audio;
 
   Student({
     required this.id,
-    required this.studentName,
-    required this.enrollment,
-    required this.companyName,
-    required this.package,
+    required this.enr,
+    required this.title,
+    required this.clink,
     required this.date,
-    required this.interviewExperience,
+    required this.category,
+    required this.pack,
+    required this.disc,
+    required this.img,
+    required this.audio,
   });
 
   factory Student.fromJson(Map<String, dynamic> json) {
     return Student(
-      id: int.parse(json['id']),
-      studentName: json['studentName'],
-      enrollment: json['enrollment'],
-      companyName: json['companyName'],
-      package: json['package'],
+      id: json['id'],
+      enr: json['enr'],
+      title: json['title'],
+      clink: json['clink'],
       date: json['date'],
-      interviewExperience: json['interviewExperience'] ??
-          '', // Assign an empty string if interviewExperience is null
+      category: json['category'],
+      pack: json['pack'],
+      disc: json['disc'],
+      img: json['img'],
+      audio: json['audio'],
     );
   }
 }

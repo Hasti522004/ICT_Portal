@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ict_portal/components/custom_app_bar.dart';
-import 'package:ict_portal/components/side_menu.dart';
 import 'package:ict_portal/screen/interview_bank/interviewbank_page.dart';
 import 'package:intl/intl.dart'; // Import the intl package
 
@@ -24,8 +22,10 @@ class _InterviewFormState extends State<InterviewForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Add Interview'),
-      drawer: SideMenu(),
+      appBar: AppBar(
+        title: Text("Interview Details"),
+        backgroundColor: Color(0xFF00A6BE),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -179,8 +179,7 @@ class _InterviewFormState extends State<InterviewForm> {
   }
 
   void submitInterview() async {
-    String url =
-        'http://192.168.137.1/ICT/API_ICT_Portal/insert_interview.php';
+    String url = 'http://192.168.137.1/ICT/API_ICT_Portal/insert_interview.php';
     Map<String, String> headers = {
       "Content-type": "application/x-www-form-urlencoded"
     };

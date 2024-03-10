@@ -18,7 +18,7 @@ class _EnrollCoursePageState extends State<EnrollCoursePage> {
   // Fetch course data from the API
   Future<void> fetchCourses() async {
     final response = await http.get(Uri.parse(
-        'http://192.168.137.1/ICT/API_ICT_Portal/fetch_course.php'));
+        'http://172.30.48.1/ICT/API_ICT_Portal/fetch_course.php'));
 
     if (response.statusCode == 200) {
       // If the server returns a 200 OK response, parse the JSON
