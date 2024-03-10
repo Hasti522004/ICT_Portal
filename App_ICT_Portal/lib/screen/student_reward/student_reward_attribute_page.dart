@@ -152,7 +152,10 @@ class _AttributePageState extends State<AttributePage> {
     String names =
         widget.selectedStudents.map((student) => student['name']!).join(", ");
     return Scaffold(
-      appBar: AppBar(title: Text('Provide Feedback')),
+      appBar: AppBar(
+        title: Text("Provide Feedback"),
+        backgroundColor: Color(0xFF00A6BE),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16),

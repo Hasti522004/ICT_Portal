@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ict_portal/components/side_menu.dart';
 import 'package:ict_portal/screen/student_reward/student_reward_attribute_page.dart';
 
 class StudentInfoPage extends StatefulWidget {
@@ -63,6 +64,8 @@ class _StudentInfoPageState extends State<StudentInfoPage> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Student Data'),
+          backgroundColor: Color(0xFF00A6BE),
+          centerTitle: true,
           actions: [
             IconButton(
               icon: Icon(Icons.send),
@@ -79,6 +82,7 @@ class _StudentInfoPageState extends State<StudentInfoPage> {
             )
           ],
         ),
+        drawer: SideMenu(),
         body: Column(
           children: [
             Padding(
