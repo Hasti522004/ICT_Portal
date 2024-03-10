@@ -5,7 +5,6 @@ import 'package:ict_portal/components/custom_app_bar.dart';
 import 'package:ict_portal/components/side_menu.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class GiveBookPage extends StatefulWidget {
   @override
   _GiveBookPageState createState() => _GiveBookPageState();

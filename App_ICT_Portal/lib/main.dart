@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ict_portal/screen/home_page.dart';
+import 'package:ict_portal/screen/student_reward/student_reward_input_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +18,7 @@ class MainApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: StudentInfoPage(),
     );
   }
 
