@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ict_portal/screen/anonymous_feedback/Anonymous_feedback_page.dart';
+import 'package:ict_portal/screen/anonymous_feedback/show_Feedback.dart';
 import 'package:ict_portal/screen/auth/login_page.dart';
 import 'package:ict_portal/screen/home_page.dart';
 import 'package:ict_portal/screen/interview_bank/interviewbank_page.dart';
@@ -210,6 +211,18 @@ class SideMenu extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => FeedbackForm()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.feedback),
+            title: Text('Fetch Anonymous Feedback'),
+            onTap: () {
+              Navigator.pop(context); // Close the drawer
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AnonymousFeedbackPage()),
               );
             },
           ),

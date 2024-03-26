@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ict_portal/components/custom_app_bar.dart';
 import 'package:ict_portal/components/side_menu.dart';
+import 'package:ict_portal/screen/user/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class StudentReviewPage extends StatefulWidget {
   const StudentReviewPage({Key? key}) : super(key: key);
@@ -14,7 +16,21 @@ class StudentReviewPage extends StatefulWidget {
 
 class _StudentReviewPageState extends State<StudentReviewPage> {
   String studentName = '';
-  String enrollment_number = '92000133043';
+  String enrollment_number = '';
+
+  @override
+  void initState() {
+    super.initState();
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    enrollment_number = user?.enrollment ?? '';
+    fetchStudentName(enrollment_number).then((name) {
+      setState(() {
+        studentName = name;
+      });
+    }).catchError((error) {
+      print('Error fetching student name: $error');
+    });
+  }
 
   Future<String> fetchStudentName(String enrollmentNumber) async {
     final response = await http.get(Uri.parse(
@@ -34,18 +50,6 @@ class _StudentReviewPageState extends State<StudentReviewPage> {
     } else {
       throw Exception('Failed to load student data');
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchStudentName(enrollment_number).then((name) {
-      setState(() {
-        studentName = name;
-      });
-    }).catchError((error) {
-      print('Error fetching student name: $error');
-    });
   }
 
   Future<List<dynamic>> fetchReviews() async {

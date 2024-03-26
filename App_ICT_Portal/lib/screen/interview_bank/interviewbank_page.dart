@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ict_portal/components/custom_app_bar.dart';
 import 'package:ict_portal/components/side_menu.dart';
-import 'package:ict_portal/screen/interview_bank/Student.dart';
 import 'package:ict_portal/screen/interview_bank/interviewForm_page.dart';
+import 'package:ict_portal/screen/interview_bank/interview_bank_student_model/Student.dart';
 import 'package:ict_portal/screen/interview_bank/studentDetail_page.dart';
 
 class InterviewBankPage extends StatefulWidget {
-  const InterviewBankPage({super.key});
+  const InterviewBankPage({Key? key});
 
   @override
   _InterviewBankPageState createState() => _InterviewBankPageState();
@@ -21,6 +21,8 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
   List<Student> students = [];
   TextEditingController searchController = TextEditingController();
   List<Student> filteredStudents = [];
+  Map<String, String> enrollmentToNameMap =
+      {}; // Map to store enrollment numbers and student names
 
   @override
   void initState() {
@@ -38,6 +40,12 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
           students =
               data.map((studentData) => Student.fromJson(studentData)).toList();
           filteredStudents = List.from(students);
+
+          // Populate the map with enrollment numbers and student names
+          students.forEach((student) {
+            enrollmentToNameMap[student.enr] =
+                '${student.fn} ${student.mn} ${student.ln}';
+          });
         });
       } else {
         throw Exception('Failed to fetch student data');
@@ -66,8 +74,11 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
   void filterStudents(String query) {
     setState(() {
       filteredStudents = students.where((student) {
-        return student.enr.toLowerCase().contains(query.toLowerCase()) ||
-            student.title.toLowerCase().contains(query.toLowerCase());
+        // Search for students by name using the map
+        return enrollmentToNameMap[student.enr]
+                ?.toLowerCase()
+                .contains(query.toLowerCase()) ??
+            false || student.title.toLowerCase().contains(query.toLowerCase());
       }).toList();
     });
   }
@@ -89,7 +100,7 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
                   controller: searchController,
                   onChanged: filterStudents,
                   decoration: const InputDecoration(
-                    labelText: 'Search by Enrollment Number or Company Name',
+                    labelText: 'Search by Student Name or Company Name',
                     prefixIcon: Icon(Icons.search),
                   ),
                 ),
@@ -108,7 +119,9 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(filteredStudents[index].title),
+                                Text(enrollmentToNameMap[
+                                        filteredStudents[index].enr] ??
+                                    'Unknown'), // Display student name
                                 IconButton(
                                   icon: const Icon(Icons.add),
                                   onPressed: () {

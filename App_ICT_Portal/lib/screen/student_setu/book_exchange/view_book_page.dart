@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:ict_portal/components/custom_app_bar.dart';
 import 'package:ict_portal/components/side_menu.dart';
 import 'package:ict_portal/screen/student_setu/book_exchange/Book.dart';
@@ -9,32 +12,35 @@ class ViewBookPage extends StatefulWidget {
 }
 
 class _ViewBookPageState extends State<ViewBookPage> {
-  List<Book> books = [
-    Book(
-      name: 'Book 1',
-      author: 'Author 1',
-      sellType: 'Sell',
-      priceRent: '\$20',
-      imagePath: 'assets/book1.jpg',
-    ),
-    Book(
-      name: 'Book 2',
-      author: 'Author 2',
-      sellType: 'Rent',
-      priceRent: '\$10',
-      imagePath: 'assets/book2.jpg',
-    ),
-    // Add more books as needed
-  ];
-
+  List<Book> books = [];
   List<Book> filteredBooks = [];
-
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    filteredBooks.addAll(books);
+    _fetchBooks();
+  }
+
+  Future<void> _fetchBooks() async {
+    final response = await http.get(Uri.parse(
+        'https://www.ictmu.in/ict_portal/api/booksell.php?key=booksell@ict'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> responseData = json.decode(response.body);
+      setState(() {
+        books = responseData.map((data) {
+          // Construct the image path using the base URL and the image name from the API
+          String imageName = data['image'];
+          String imagePath =
+              'https://www.ictmu.in/ict_portal/document/booksimage/$imageName';
+          return Book.fromJson(data, imagePath);
+        }).toList();
+        filteredBooks.addAll(books);
+      });
+    } else {
+      // Handle error
+    }
   }
 
   void _searchBooks(String query) {
@@ -75,7 +81,7 @@ class _ViewBookPageState extends State<ViewBookPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Image.asset(
+                      Image.network(
                         filteredBooks[index].imagePath,
                         height: 200.0,
                         fit: BoxFit.cover,
@@ -104,11 +110,6 @@ class _ViewBookPageState extends State<ViewBookPage> {
                                   onPressed: () => _showContactDialog(),
                                   child: Text('Contact Seller'),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () => _showImageDialog(
-                                      filteredBooks[index].imagePath),
-                                  child: Text('View Image'),
-                                ),
                               ],
                             ),
                           ],
@@ -132,23 +133,6 @@ class _ViewBookPageState extends State<ViewBookPage> {
         return AlertDialog(
           title: Text("Contact Seller"),
           content: Text("You can contact the seller via email or phone."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Close"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _showImageDialog(String imagePath) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Image.asset(imagePath),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),

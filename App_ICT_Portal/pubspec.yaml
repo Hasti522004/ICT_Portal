@@ -7,20 +7,24 @@ environment:
   sdk: '>=3.2.6 <4.0.0'
 
 dependencies:
-  file_picker: ^6.1.1
+  file_picker: ^8.0.0+1
   fl_chart: ^0.66.2
   flutter:
     sdk: flutter
-  # flutter_html: ^2.2.1
+  flutter_html: 3.0.0-beta.2
+  flutter_math_fork: ^0.7.2
   http: ^1.2.0
   image_picker: ^1.0.7
   intl: ^0.19.0
+  provider: ^6.1.2
   url_launcher: ^6.2.4
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 flutter:
   uses-material-design: true
+

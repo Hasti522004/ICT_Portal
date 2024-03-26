@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ict_portal/screen/interview_bank/Student.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:ict_portal/screen/interview_bank/interview_bank_student_model/Student.dart';
 
 class StudentDetailsPage extends StatelessWidget {
   final Student student;
@@ -21,24 +22,46 @@ class StudentDetailsPage extends StatelessWidget {
             children: [
               Text(
                 'Student Name: ${student.id}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold), // Increased font size to 20
               ),
-              SizedBox(height: 8),
-              Text('Enrollment: ${student.enr}'),
-              SizedBox(height: 8),
-              Text('Company Name: ${student.title}'),
-              SizedBox(height: 8),
-              Text('Package: ${student.pack}'),
-              SizedBox(height: 8),
-              Text('Date: ${student.date}'),
-              SizedBox(height: 8),
+              SizedBox(height: 12), // Increased height
+              Text(
+                'Enrollment: ${student.enr}',
+                style: TextStyle(fontSize: 16), // Increased font size to 16
+              ),
+              SizedBox(height: 12), // Increased height
+              Text(
+                'Company Name: ${student.title}',
+                style: TextStyle(fontSize: 16), // Increased font size to 16
+              ),
+              SizedBox(height: 12), // Increased height
+              Text(
+                'Package: ${student.pack}',
+                style: TextStyle(fontSize: 16), // Increased font size to 16
+              ),
+              SizedBox(height: 12), // Increased height
+              Text(
+                'Date: ${student.date}',
+                style: TextStyle(fontSize: 16), // Increased font size to 16
+              ),
+              SizedBox(height: 12), // Increased height
               Text(
                 'Interview Experience: ',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18), // Increased font size to 18
               ),
-              SizedBox(height: 8),
-              Text('${student.disc}'),
-              SizedBox(height: 8),
+              SizedBox(height: 12), // Increased height
+              Html(
+                data: student.disc,
+                style: {
+                  "body": Style(
+                      fontSize: FontSize(16)), // Increased font size to 16
+                },
+              ),
+              SizedBox(height: 12), // Increased height
             ],
           ),
         ),

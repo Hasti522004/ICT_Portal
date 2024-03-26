@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:ict_portal/components/custom_app_bar.dart';
 import 'package:ict_portal/components/side_menu.dart';
+import 'package:ict_portal/screen/user/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -30,6 +32,10 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+    print('User Data:');
+    print('Enrollment Number: ${user?.enrollment}');
+    print('Password: ${user?.password}');
     return Scaffold(
       appBar: CustomAppBar(title: 'ICT Promotion App'),
       drawer: SideMenu(),

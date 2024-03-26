@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ict_portal/screen/home_page.dart'; // Import Flutter services for input formatting
+import 'package:http/http.dart' as http;
+import 'package:ict_portal/screen/home_page.dart';
+import 'package:ict_portal/screen/user/User.dart';
+import 'package:ict_portal/screen/user/user_provider.dart';
+import 'package:provider/provider.dart'; // Import Flutter services for input formatting
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -29,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ],
           ),
         ),
-        backgroundColor: Colors.blue, // Set app bar color
+        backgroundColor: Color(0xFF00A6BE), // Set app bar color
       ),
 
       body: Padding(
@@ -66,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: !_isPasswordVisible,
                   onChanged: (value) {
                     setState(() {
-                      _isPasswordValid = _validatePassword(value);
+                      // _isPasswordValid = _validatePassword(value);
                     });
                   },
                   decoration: InputDecoration(
@@ -99,11 +105,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 16.0),
                 ElevatedButton(
                   onPressed: () {
-                    _login();
+                    _login(context);
                   },
                   child: Text('Login'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue, // Set button color
+                    primary: Color(0xFF00A6BE), // Set button color
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -120,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextButton(
                   onPressed: () {
                     // Implement reset password logic here
-                    _showForgotPasswordDialog();
+                    // _showForgotPasswordDialog();
                   },
                   child: Text('Forgot Password?'),
                 ),
@@ -132,62 +138,62 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _login() {
-    // Validate inputs
-    if (_enrollmentController.text.length != 11) {
+  void _login(BuildContext context) async {
+    final enrollment = _enrollmentController.text;
+    final password = _passwordController.text;
+
+    final url = Uri.parse(
+        'https://www.ictmu.in/ict_portal/api/student.php?key=student@ict');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+
+        bool isLoggedIn = false;
+
+        for (var item in data) {
+          final studentEnroll = item['enroll'];
+          final studentPswd = item['pswd'];
+
+          if (studentEnroll == enrollment && studentPswd == password) {
+            isLoggedIn = true;
+            break;
+          }
+        }
+
+        if (isLoggedIn) {
+          final snackBar = SnackBar(
+            content: Text('User logged in successfully!'),
+            backgroundColor: Colors.green,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          // Assuming successful login, set the user
+          User user = User(enrollment: enrollment, password: password);
+          Provider.of<UserProvider>(context, listen: false).setUser(user);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()),
+          );
+        } else {
+          setState(() {
+            _errorMessage = 'Invalid enrollment number or password.';
+          });
+        }
+      } else {
+        setState(() {
+          _errorMessage =
+              'Failed to connect to the server. Please try again later.';
+        });
+      }
+    } catch (e) {
       setState(() {
-        _errorMessage = 'Please enter a valid 11-digit enrollment number.';
+        _errorMessage =
+            'Network error occurred. Please check your internet connection.';
       });
-      return;
     }
-    if (!_isPasswordValid) {
-      setState(() {
-        _errorMessage = 'Please enter a valid password.';
-      });
-      return;
-    }
-
-    // Implement login logic here
-
-    // Show success message
-    final snackBar = SnackBar(
-      content: Text('User logged in successfully!'),
-      backgroundColor: Colors.green, // Set background color for the SnackBar
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
-  }
-
-  void _showForgotPasswordDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Forgot Password?'),
-          content:
-              Text('Please contact your administrator for password reset.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  bool _validatePassword(String value) {
-    // Password criteria: 8-10 characters, uppercase, lowercase, digit, special character
-    String pattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+{}|:"<>?]).{8,10}$';
-    RegExp regExp = RegExp(pattern);
-    return regExp.hasMatch(value);
   }
 }
