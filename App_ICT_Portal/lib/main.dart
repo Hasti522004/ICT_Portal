@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:ict_portal/screen/student_setu/book_exchange/view_book_page.dart';
+import 'package:ict_portal/screen/home_page.dart';
 import 'package:ict_portal/screen/user/user_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -22,7 +27,7 @@ class MainApp extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           debugShowCheckedModeBanner: false,
-          home: ViewBookPage(),
+          home: HomePage(),
         ));
   }
 

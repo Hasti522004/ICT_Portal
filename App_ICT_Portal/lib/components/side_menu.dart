@@ -111,7 +111,7 @@ class SideMenu extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ListOfQueryPage(),
+                          builder: (context) => QueryListPage(),
                         ),
                       );
                     },
@@ -144,7 +144,7 @@ class SideMenu extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EnrollCoursePage(),
+                          builder: (context) => CourseListPage(),
                         ),
                       );
                     },

@@ -4,8 +4,9 @@ import 'package:ict_portal/screen/interview_bank/interview_bank_student_model/St
 
 class StudentDetailsPage extends StatelessWidget {
   final Student student;
+  final String studentName;
 
-  StudentDetailsPage({required this.student});
+  StudentDetailsPage({required this.studentName, required this.student});
 
   @override
   Widget build(BuildContext context) {
@@ -21,47 +22,54 @@ class StudentDetailsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Student Name: ${student.id}',
+                'Student Name: $studentName',
                 style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold), // Increased font size to 20
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SizedBox(height: 12), // Increased height
+              SizedBox(height: 12),
               Text(
                 'Enrollment: ${student.enr}',
-                style: TextStyle(fontSize: 16), // Increased font size to 16
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 12), // Increased height
+              SizedBox(height: 12),
               Text(
                 'Company Name: ${student.title}',
-                style: TextStyle(fontSize: 16), // Increased font size to 16
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 12), // Increased height
+              SizedBox(height: 12),
               Text(
                 'Package: ${student.pack}',
-                style: TextStyle(fontSize: 16), // Increased font size to 16
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 12), // Increased height
+              SizedBox(height: 12),
               Text(
                 'Date: ${student.date}',
-                style: TextStyle(fontSize: 16), // Increased font size to 16
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 12), // Increased height
+              SizedBox(height: 12),
+              Divider(
+                height: 20,
+                thickness: 2,
+                color: Colors.grey[400],
+              ),
+              SizedBox(height: 12),
               Text(
                 'Interview Experience: ',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18), // Increased font size to 18
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
-              SizedBox(height: 12), // Increased height
+              SizedBox(height: 12),
               Html(
                 data: student.disc,
                 style: {
-                  "body": Style(
-                      fontSize: FontSize(16)), // Increased font size to 16
+                  "body": Style(fontSize: FontSize(16)),
                 },
               ),
-              SizedBox(height: 12), // Increased height
+              SizedBox(height: 12),
             ],
           ),
         ),

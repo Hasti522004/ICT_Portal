@@ -1,6 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ict_portal/components/custom_app_bar.dart';
+import 'package:ict_portal/components/side_menu.dart';
 
 class AnonymousFeedbackPage extends StatefulWidget {
   static const String fid = 'your_fid_here'; // Static value for fid
@@ -26,15 +29,20 @@ class _AnonymousFeedbackPageState extends State<AnonymousFeedbackPage> {
       _isLoading = true;
     });
 
-    final response = await http.get(Uri.parse(
-        'https://www.ictmu.in/ict_portal/api/anonymous-feeedback.php?key=anonymous-feeedback@ict&fid=${AnonymousFeedbackPage.fid}'));
+    try {
+      final response = await http.get(Uri.parse(
+          'https://www.ictmu.in/ict_portal/api/anonymous-feeedback.php?key=anonymous-feeedback@ict'));
 
-    if (response.statusCode == 200) {
-      setState(() {
-        _feedbackList = json.decode(response.body);
-        _isLoading = false;
-      });
-    } else {
+      if (response.statusCode == 200) {
+        setState(() {
+          _feedbackList = json.decode(response.body);
+          _isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to fetch feedback');
+      }
+    } catch (e) {
+      print('Error fetching feedback: $e');
       setState(() {
         _isLoading = false;
       });
@@ -43,7 +51,7 @@ class _AnonymousFeedbackPageState extends State<AnonymousFeedbackPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Error'),
-            content: Text('Failed to fetch feedback'),
+            content: Text('Failed to fetch feedback. Please try again later.'),
             actions: [
               TextButton(
                 onPressed: () {
@@ -61,9 +69,8 @@ class _AnonymousFeedbackPageState extends State<AnonymousFeedbackPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Anonymous Feedback'),
-      ),
+      appBar: CustomAppBar(title: "Anonymous Feedback"),
+      drawer: SideMenu(),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _feedbackList.isEmpty
@@ -77,8 +84,15 @@ class _AnonymousFeedbackPageState extends State<AnonymousFeedbackPage> {
                       child: Card(
                         elevation: 3,
                         child: ListTile(
-                          title: Text(feedback['subject'] ?? ''),
-                          subtitle: Text(feedback['message'] ?? ''),
+                          title: Text(feedback['feedback'] ?? ''),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 8),
+                              Text('Semester: ${feedback['sem'] ?? ''}'),
+                              Text('Date: ${feedback['date'] ?? ''}'),
+                            ],
+                          ),
                         ),
                       ),
                     );

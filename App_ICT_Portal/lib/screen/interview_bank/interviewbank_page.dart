@@ -15,7 +15,8 @@ class InterviewBankPage extends StatefulWidget {
   _InterviewBankPageState createState() => _InterviewBankPageState();
 }
 
-class _InterviewBankPageState extends State<InterviewBankPage> {
+class _InterviewBankPageState extends State<InterviewBankPage>
+    with SingleTickerProviderStateMixin {
   Map<int, bool?> showDetailsMap = {};
   Map<int, bool?> showInterviewButtonMap = {};
   List<Student> students = [];
@@ -23,11 +24,40 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
   List<Student> filteredStudents = [];
   Map<String, String> enrollmentToNameMap =
       {}; // Map to store enrollment numbers and student names
+  Map<String, String> studentMap =
+      {}; // Map to store student data (enrollment number -> name)
 
   @override
   void initState() {
     super.initState();
     fetchStudents();
+    fetchStudentDataAndBuildConversations();
+  }
+
+  Future<void> fetchStudentDataAndBuildConversations() async {
+    try {
+      // Fetch student data
+      final studentResponse = await http.get(Uri.parse(
+          'https://www.ictmu.in/ict_portal/api/student.php?key=student@ict'));
+      if (studentResponse.statusCode == 200) {
+        final List<dynamic> students = json.decode(studentResponse.body);
+        // Populate student map
+        studentMap = Map.fromIterable(students,
+            key: (student) => student['enroll'],
+            value: (student) =>
+                '${student['fn']} ${student['mn']} ${student['ln']}');
+      } else {
+        throw Exception('Failed to fetch student data');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    print(studentMap);
+  }
+
+  // Fetch student name from the student map
+  String getStudentName(String enrollmentNumber) {
+    return studentMap[enrollmentNumber] ?? 'Unknown';
   }
 
   Future<void> fetchStudents() async {
@@ -74,11 +104,17 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
   void filterStudents(String query) {
     setState(() {
       filteredStudents = students.where((student) {
-        // Search for students by name using the map
-        return enrollmentToNameMap[student.enr]
-                ?.toLowerCase()
-                .contains(query.toLowerCase()) ??
-            false || student.title.toLowerCase().contains(query.toLowerCase());
+        // Check if the query matches the student's name
+        bool matchesName = getStudentName(student.enr)
+            .toLowerCase()
+            .contains(query.toLowerCase());
+
+        // Check if the query matches the company name
+        bool matchesCompanyName =
+            student.title.toLowerCase().contains(query.toLowerCase());
+
+        // Return true if the query matches either the student name or the company name
+        return matchesName || matchesCompanyName;
       }).toList();
     });
   }
@@ -119,9 +155,8 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(enrollmentToNameMap[
-                                        filteredStudents[index].enr] ??
-                                    'Unknown'), // Display student name
+                                Text(filteredStudents[index].title ??
+                                    'Unknown'), // Display company name
                                 IconButton(
                                   icon: const Icon(Icons.add),
                                   onPressed: () {
@@ -140,8 +175,10 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                      'Enrollment: ${filteredStudents[index].enr}'),
+                                  Text(getStudentName(
+                                          filteredStudents[index].enr) ??
+                                      'Unknown'),
+
                                   Text('Date: ${filteredStudents[index].date}'),
                                   // Add more fields as needed
                                 ],
@@ -154,6 +191,9 @@ class _InterviewBankPageState extends State<InterviewBankPage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => StudentDetailsPage(
+                                        studentName: getStudentName(
+                                                filteredStudents[index].enr) ??
+                                            'Unknown',
                                         student: filteredStudents[index],
                                       ),
                                     ),
