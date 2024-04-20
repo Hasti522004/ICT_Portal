@@ -6,6 +6,7 @@ import 'package:ict_portal/screen/home_page.dart';
 import 'package:ict_portal/screen/interview_bank/interviewbank_page.dart';
 import 'package:ict_portal/screen/leave/leave_history_page.dart';
 import 'package:ict_portal/screen/leave/take_leave_page.dart';
+import 'package:ict_portal/screen/student_reward/piechart_page.dart';
 import 'package:ict_portal/screen/student_reward/student_review_page.dart';
 import 'package:ict_portal/screen/student_reward/student_reward_input_page.dart';
 import 'package:ict_portal/screen/student_setu/book_exchange/chat_history_page.dart';
@@ -237,6 +238,17 @@ class SideMenu extends StatelessWidget {
               );
             },
           ),
+          // ListTile(
+          //   leading: Icon(Icons.reviews),
+          //   title: Text('Show Analysis'),
+          //   onTap: () {
+          //     Navigator.pop(context); // Close the drawer
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => PieChartPage(skillFrequencies: {},)),
+          //     );
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.reviews_rounded),
             title: Text('Show Reviews'),
